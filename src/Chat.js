@@ -4,9 +4,10 @@ import axios from "axios";
 function Chat() {
   const [prevMessages, setPrevMessages] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+  const [messagePosted, setMessagePosted] = useState([]);
 
   const UNIQUE_TOKEN = process.env.REACT_APP_TOKEN;
-  const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?token=${UNIQUE_TOKEN}`;
+  const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?token=[${UNIQUE_TOKEN}]`;
 
   //   const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?
   // since=1521096352339&limit=10&token=${UNIQUE_TOKEN}`;
@@ -36,18 +37,17 @@ function Chat() {
     axios
       .post(
         "https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0",
-        { message: newMessage, author: "Tom" },
+        { message: newMessage, author: "User" },
         {
           headers: {
             "content-type": "application/json; charset=utf-8",
-            crossorigin: true,
-            Authorization: `Basic ${UNIQUE_TOKEN}`
+            token: UNIQUE_TOKEN
           }
         }
       )
       .then(response => {
-        console.log(response);
-        //setMessagePosted(prevMessages => [...prevMessages, data]);
+        console.log("response", response);
+        setMessagePosted(prevMessages => [...prevMessages, response.data]);
       })
       .catch(error => {
         console.log("error", error);
@@ -63,7 +63,17 @@ function Chat() {
   return (
     <>
       <section className="chat">
-        <div className="message-container"></div>
+        <div className="message-container">
+          {messagePosted &&
+            messagePosted.map(message => (
+              <div className="new-message-posted message" key={message._id}>
+                <p className="user-message"> {message.message}</p>
+                <span className="date date-new-message">
+                  {message.timestamp}
+                </span>
+              </div>
+            ))}
+        </div>
 
         <div className="new-message-input">
           <form>
