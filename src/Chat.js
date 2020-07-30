@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import Moment from "react-moment";
+import Timestamp from "react-timestamp";
 
 function Chat() {
   const [loading, setLoading] = useState(true);
@@ -14,10 +14,9 @@ function Chat() {
   const texteareaRef = useRef(null);
 
   const UNIQUE_TOKEN = process.env.REACT_APP_TOKEN;
-  const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?token=[${UNIQUE_TOKEN}]`;
+  //const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?token=[${UNIQUE_TOKEN}]`;
 
-  //   const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?
-  // since=1521096352339&limit=10&token=${UNIQUE_TOKEN}`;
+  const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?since=1521096352339&limit=10&token=${UNIQUE_TOKEN}`;
 
   /* eslint-disable */
   useEffect(() => {
@@ -26,6 +25,8 @@ function Chat() {
       .then(response => {
         console.log("data", response);
         setPrevMessages(response.data);
+        elementRef.current.scrollTop =
+          elementRef.current.scrollHeight - elementRef.current.clientHeight;
         setLoading(false);
       })
       .catch(error => {
@@ -106,7 +107,7 @@ function Chat() {
                 <span className="name">{message.author}</span>
                 <p className="user-message"> {message.message}</p>
                 <span className="date">
-                  <Moment unix> {message.timestamp} </Moment>
+                  <Timestamp date={message.timestamp} />
                 </span>
               </div>
             ))}
@@ -116,7 +117,10 @@ function Chat() {
               <div className="new-message-posted message" key={message._id}>
                 <p className="user-message"> {message.message}</p>
                 <span className="date date-new-message">
-                  <Moment unix> {message.timestamp} </Moment>
+                  <Timestamp
+                    date={message.timestamp}
+                    options={{ includeDay: true, twentyFourHour: true }}
+                  />
                 </span>
               </div>
             ))}
