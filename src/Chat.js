@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Moment from "react-moment";
 
 function Chat() {
+  const [loading, setLoading] = useState(true);
+  const [errorEmptyMessage, setErrorEmptyMessage] = useState(false);
+  const [errorApi, setErrorApi] = useState(false);
+  const [errorPostMessage, setErrorPostMessage] = useState(false);
   const [prevMessages, setPrevMessages] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [messagePosted, setMessagePosted] = useState([]);
+  const elementRef = useRef(null);
+  const texteareaRef = useRef(null);
 
   const UNIQUE_TOKEN = process.env.REACT_APP_TOKEN;
   const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?token=[${UNIQUE_TOKEN}]`;
@@ -19,20 +26,29 @@ function Chat() {
       .then(response => {
         console.log("data", response);
         setPrevMessages(response.data);
+        setLoading(false);
       })
       .catch(error => {
         console.log("error", error);
+        setLoading(false);
+        setErrorApi(true);
       });
   }, []);
 
   const writingMessage = e => {
     setNewMessage(e.target.value);
+    setErrorEmptyMessage(false);
   };
 
   const sendMessage = e => {
     e.preventDefault();
 
     console.log("newMessage", newMessage);
+
+    if (newMessage.length === 0) {
+      setErrorEmptyMessage(true);
+      return;
+    }
 
     axios
       .post(
@@ -47,7 +63,15 @@ function Chat() {
       )
       .then(response => {
         console.log("response", response);
+        console.log("response", response.data);
+
         setMessagePosted(prevMessages => [...prevMessages, response.data]);
+
+        elementRef.current.scrollTop =
+          elementRef.current.scrollHeight - elementRef.current.clientHeight;
+
+        setNewMessage("");
+        texteareaRef.current.focus();
       })
       .catch(error => {
         console.log("error", error);
@@ -62,18 +86,49 @@ function Chat() {
 
   return (
     <>
-      <section className="chat">
+      <section className="chat" ref={elementRef}>
+        {loading && (
+          <span className="loading" data-testid="loading">
+            Loading...
+          </span>
+        )}
+        {errorApi && (
+          <span className="error" data-testid="error">
+            Error: something went wrong in fetching the previous messages.
+            <br />
+            Please try again later!
+          </span>
+        )}
         <div className="message-container">
+          {prevMessages &&
+            prevMessages.map(message => (
+              <div className="old-message message" key={message._id}>
+                <span className="name">{message.author}</span>
+                <p className="user-message"> {message.message}</p>
+                <span className="date">
+                  <Moment unix> {message.timestamp} </Moment>
+                </span>
+              </div>
+            ))}
+
           {messagePosted &&
             messagePosted.map(message => (
               <div className="new-message-posted message" key={message._id}>
                 <p className="user-message"> {message.message}</p>
                 <span className="date date-new-message">
-                  {message.timestamp}
+                  <Moment unix> {message.timestamp} </Moment>
                 </span>
               </div>
             ))}
         </div>
+
+        {errorPostMessage && (
+          <span className="error">
+            Error: something went wrong and your message couldn't be posted.
+            <br />
+            Please try again later!
+          </span>
+        )}
 
         <div className="new-message-input">
           <form>
@@ -87,12 +142,18 @@ function Chat() {
               value={newMessage}
               onChange={writingMessage}
               onKeyDown={enterCheck}
+              ref={texteareaRef}
             ></textarea>
 
             <button onClick={sendMessage}>Send</button>
           </form>
         </div>
       </section>
+      {errorEmptyMessage && (
+        <span className="error">
+          Error: empty messages cannot be sent; please write something.
+        </span>
+      )}
     </>
   );
 }

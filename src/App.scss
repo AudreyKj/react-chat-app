@@ -1,6 +1,7 @@
 @import-normalize;
 
 $font: Arial, Helvetica, sans-serif;
+$red: #ff6347;
 
 @mixin center($direction) {
   display: flex;
@@ -32,7 +33,7 @@ div.App {
 
 /* CHAT */
 button {
-  background-color: #ff6347;
+  background-color: $red;
   border-radius: 3px;
   border: none;
   cursor: pointer;
@@ -75,6 +76,50 @@ div.message-container {
   padding-bottom: 16px;
 }
 
+.message {
+  border: 1px solid #808080;
+  border-radius: 12px;
+  padding-top: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
+
+  margin-top: 16px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+div.old-message {
+  background-color: #fff;
+  padding-top: 10px;
+  max-width: 20%;
+  margin-left: 24px;
+  padding-bottom: 16px;
+}
+
+span.name,
+span.date {
+  color: #989898;
+  display: block;
+}
+
+p.user-message {
+  color: #333;
+}
+
+div.new-message-posted {
+  max-width: 55%;
+  margin-left: 25%;
+
+  margin-right: 24px;
+  background-color: #fcf6c3;
+  overflow: auto;
+  padding-bottom: 6px;
+}
+
+.date-new-message {
+  float: right;
+}
+
 /* MESSAGE INPUT */
 div.new-message-input {
   width: 100%;
@@ -94,4 +139,18 @@ textarea {
   padding: 10px;
   margin-right: 15px;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+/* ERRORS */
+span.error,
+span.loading {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
+span.error {
+  color: $red;
 }
