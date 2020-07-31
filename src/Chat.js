@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Timestamp from "react-timestamp";
+import Moment from "react-moment";
 
 function Chat() {
   const [loading, setLoading] = useState(true);
@@ -9,7 +10,7 @@ function Chat() {
   const [errorPostMessage, setErrorPostMessage] = useState(false);
   const [prevMessages, setPrevMessages] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-  const [messagePosted, setMessagePosted] = useState([]);
+  const [messagesPosted, setMessagesPosted] = useState([]);
   const elementRef = useRef(null);
   const texteareaRef = useRef(null);
 
@@ -19,6 +20,7 @@ function Chat() {
   const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?since=1521096352339&limit=10&token=${UNIQUE_TOKEN}`;
 
   /* eslint-disable */
+  //disabled eslint to pass empty array to useEffect
   useEffect(() => {
     axios
       .get(url)
@@ -66,7 +68,7 @@ function Chat() {
         console.log("response", response);
         console.log("response", response.data);
 
-        setMessagePosted(prevMessages => [...prevMessages, response.data]);
+        setMessagesPosted(prevMessages => [...prevMessages, response.data]);
 
         elementRef.current.scrollTop =
           elementRef.current.scrollHeight - elementRef.current.clientHeight;
@@ -75,7 +77,7 @@ function Chat() {
         texteareaRef.current.focus();
       })
       .catch(error => {
-        console.log("error", error);
+        setErrorPostMessage(true);
       });
   };
 
@@ -95,9 +97,7 @@ function Chat() {
         )}
         {errorApi && (
           <span className="error" data-testid="error">
-            Error: something went wrong in fetching the previous messages.
-            <br />
-            Please try again later!
+            Error in fetching the previous messages; please try again later!
           </span>
         )}
         <div className="message-container">
@@ -107,13 +107,16 @@ function Chat() {
                 <span className="name">{message.author}</span>
                 <p className="user-message"> {message.message}</p>
                 <span className="date">
-                  <Timestamp date={message.timestamp} />
+                  <Timestamp
+                    date={message.timestamp}
+                    options={{ includeDay: true, twentyFourHour: true }}
+                  />
                 </span>
               </div>
             ))}
 
-          {messagePosted &&
-            messagePosted.map(message => (
+          {messagesPosted &&
+            messagesPosted.map(message => (
               <div className="new-message-posted message" key={message._id}>
                 <p className="user-message"> {message.message}</p>
                 <span className="date date-new-message">
@@ -128,9 +131,7 @@ function Chat() {
 
         {errorPostMessage && (
           <span className="error">
-            Error: something went wrong and your message couldn't be posted.
-            <br />
-            Please try again later!
+            Error: your message couldn't be posted. Please try again later!
           </span>
         )}
 
