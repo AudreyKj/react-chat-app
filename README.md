@@ -4,12 +4,16 @@ React chat app that retrieves previous messages and enables users to post messag
 
 ## Implementation
 
-My implementation focused on usability and responsiveness with a coherent design. <br/> I've chosen React because it ensures great and fast user experience when UI elements change. I've mostly used stateless function components and Hooks (useState, useEffect, useRef) because of their readability and flexibility. The app also features loading and error messages. <br/>
-I've tested both components with Jest and added metatags with react-helmet to improve SEO. <br/>
+My implementation focused on usability and responsiveness with a coherent design. <br/><br/> I've chosen React because it ensures great and fast user experience when UI elements change. I've mostly used stateless function components and Hooks (useState, useEffect, useRef) because of their readability and flexibility. The app also features loading and error messages. <br/><br/>
+I've tested both components with Jest and used react-helmet to improve SEO. <br/>
 
 ## Future improvements
 
-If this chat was part of a larger app with components that share information, then I think using Redux would be better to manage the state. I would also add polyfills for older browsers, use Material-UI to ensure the coherent styling of numerous elements, and add more tests.
+- If this chat was part of a larger app with components that share information, then I think using Redux would be better to manage the state.
+- I would also add polyfills for older browsers
+- use Material-UI to ensure the coherent styling of numerous elements across large application
+- add more tests
+- improve the app's accessibility for people with disabilities.
 
 ## Features
 
