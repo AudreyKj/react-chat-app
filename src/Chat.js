@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Timestamp from "react-timestamp";
-import Moment from "react-moment";
 
 function Chat() {
   const [loading, setLoading] = useState(true);
@@ -24,14 +23,12 @@ function Chat() {
     axios
       .get(url)
       .then(response => {
-        console.log("data", response);
         setPrevMessages(response.data);
         elementRef.current.scrollTop =
           elementRef.current.scrollHeight - elementRef.current.clientHeight;
         setLoading(false);
       })
       .catch(error => {
-        console.log("error", error);
         setLoading(false);
         setErrorApi(true);
       });
@@ -44,8 +41,6 @@ function Chat() {
 
   const sendMessage = e => {
     e.preventDefault();
-
-    console.log("newMessage", newMessage);
 
     if (newMessage.length === 0) {
       setErrorEmptyMessage(true);
@@ -64,9 +59,6 @@ function Chat() {
         }
       )
       .then(response => {
-        console.log("response", response);
-        console.log("response", response.data);
-
         setMessagesPosted(prevMessages => [...prevMessages, response.data]);
 
         elementRef.current.scrollTop =
@@ -140,19 +132,18 @@ function Chat() {
 
         <div className="new-message-input">
           <form>
-            <label forhtml="newMessage">
-              <textarea
-                id="newMessage"
-                name="newMessage"
-                rows="1"
-                cols="50"
-                placeholder="Message"
-                value={newMessage}
-                onChange={writingMessage}
-                onKeyDown={enterCheck}
-                ref={texteareaRef}
-              ></textarea>
-            </label>
+            <label forhtml="newMessage"> </label>
+            <textarea
+              id="newMessage"
+              name="newMessage"
+              rows="1"
+              cols="50"
+              placeholder="Message"
+              value={newMessage}
+              onChange={writingMessage}
+              onKeyDown={enterCheck}
+              ref={texteareaRef}
+            ></textarea>
 
             <button onClick={sendMessage}>Send</button>
           </form>
