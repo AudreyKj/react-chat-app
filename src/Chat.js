@@ -140,18 +140,19 @@ function Chat() {
 
         <div className="new-message-input">
           <form>
-            <label forhtml="newMessage"> </label>
-            <textarea
-              id="newMessage"
-              name="newMessage"
-              rows="1"
-              cols="50"
-              placeholder="Message"
-              value={newMessage}
-              onChange={writingMessage}
-              onKeyDown={enterCheck}
-              ref={texteareaRef}
-            ></textarea>
+            <label forhtml="newMessage">
+              <textarea
+                id="newMessage"
+                name="newMessage"
+                rows="1"
+                cols="50"
+                placeholder="Message"
+                value={newMessage}
+                onChange={writingMessage}
+                onKeyDown={enterCheck}
+                ref={texteareaRef}
+              ></textarea>
+            </label>
 
             <button onClick={sendMessage}>Send</button>
           </form>
