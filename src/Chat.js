@@ -15,7 +15,6 @@ function Chat() {
   const texteareaRef = useRef(null);
 
   const UNIQUE_TOKEN = process.env.REACT_APP_TOKEN;
-  //const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?token=[${UNIQUE_TOKEN}]`;
 
   const url = `https://chatty.kubernetes.doodle-test.com/api/chatty/v1.0/?since=1521096352339&limit=10&token=${UNIQUE_TOKEN}`;
 
@@ -96,14 +95,18 @@ function Chat() {
           </span>
         )}
         {errorApi && (
-          <span className="error" data-testid="error">
+          <span className="error">
             Error in fetching the previous messages; please try again later!
           </span>
         )}
         <div className="message-container">
           {prevMessages &&
             prevMessages.map(message => (
-              <div className="old-message message" key={message._id}>
+              <div
+                className="old-message message"
+                key={message._id}
+                data-testid="past-messages"
+              >
                 <span className="name">{message.author}</span>
                 <p className="user-message"> {message.message}</p>
                 <span className="date">
