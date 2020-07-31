@@ -40,6 +40,5 @@
   },
   "devDependencies": {
     "postcss-normalize": "^9.0.0"
-  },
-  "proxy": "https://cors-anywhere.herokuapp.com/"
+  }
 }

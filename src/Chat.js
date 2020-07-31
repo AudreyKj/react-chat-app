@@ -110,18 +110,17 @@ function Chat() {
               </div>
             ))}
 
-          {messagesPosted &&
-            messagesPosted.map(message => (
-              <div className="new-message-posted message" key={message._id}>
-                <p className="user-message"> {message.message}</p>
-                <span className="date date-new-message">
-                  <Timestamp
-                    date={message.timestamp}
-                    options={{ includeDay: true, twentyFourHour: true }}
-                  />
-                </span>
-              </div>
-            ))}
+          {messagesPosted.map(message => (
+            <div className="new-message-posted message" key={message._id}>
+              <p className="user-message"> {message.message}</p>
+              <span className="date date-new-message">
+                <Timestamp
+                  date={message.timestamp}
+                  options={{ includeDay: true, twentyFourHour: true }}
+                />
+              </span>
+            </div>
+          ))}
         </div>
 
         {errorPostMessage && (
